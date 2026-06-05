@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GZ-Diplomacy Bug Report</title>
+  <style>
+    :root {
+      --black: #05070a;
+      --gunmetal: #121a22;
+      --gunmetal-light: #1b2632;
+      --panel: rgba(18, 26, 34, 0.94);
+      --primary-blue: #0b3d66;
+      --primary-blue-light: #0f5187;
+      --light-grey: #c8d0d8;
+      --muted: #98a8b8;
+      --white: #ffffff;
+      --orange: #ff6600;
+      --green: #7fd17f;
+      --red: #ff796b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #182331 0%, transparent 34%),
+        radial-gradient(circle at bottom right, rgba(255, 102, 0, 0.12) 0%, transparent 30%),
+        linear-gradient(135deg, var(--black), #0b1016 45%, var(--gunmetal));
+      color: var(--light-grey);
+      font-family:
+        "SF Mono", "Cascadia Mono", "Fira Code", "IBM Plex Mono",
+        "Courier New", monospace;
+      font-size: 13pt;
+      line-height: 1.55;
+      padding: 28px;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      background: var(--panel);
+      border: 1px solid #293746;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28pt;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      color: var(--white);
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 15pt;
+      color: var(--white);
+    }
+
+    p {
+      margin: 0 0 16px;
+    }
+
+    .brand {
+      color: var(--orange);
+    }
+
+    .intro {
+      color: var(--light-grey);
+      max-width: 850px;
+      margin-bottom: 20px;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 11.5pt;
+    }
+
+    .friendly {
+      border-left: 4px solid var(--orange);
+      background: rgba(11, 61, 102, 0.28);
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 18px 0 24px;
+    }
+
+    .section {
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid #2c3b49;
+    }
+
+    label {
+      display: block;
+      margin: 16px 0 8px;
+      color: var(--light-grey);
+      font-weight: 700;
+    }
+
+    .hint {
+      display: block;
+      color: var(--muted);
+      font-weight: 400;
+      font-size: 11.5pt;
+      margin-top: 4px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 18px;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 14px;
+        font-size: 12pt;
+      }
+      main {
+        padding: 20px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: var(--primary-blue);
+      color: var(--light-grey);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      border-radius: 8px;
+      padding: 11px 13px;
+      font-family:
+        "JetBrains Mono", "SF Mono", "Cascadia Mono", "Fira Code",
+        "Courier New", monospace;
+      font-size: 12.5pt;
+      line-height: 1.45;
+      outline: none;
+    }
+
+    select {
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--light-grey) 50%),
+        linear-gradient(135deg, var(--light-grey) 50%, transparent 50%);
+      background-position:
+        calc(100% - 18px) calc(50% - 3px),
+        calc(100% - 13px) calc(50% - 3px);
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.22);
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    textarea.large {
+      min-height: 230px;
+    }
+
+    .required {
+      color: var(--orange);
+    }
+
+    button {
+      margin-top: 28px;
+      background: var(--orange);
+      color: #111111;
+      border: 1px solid var(--orange);
+      border-radius: 8px;
+      padding: 14px 28px;
+      font-family:
+        "JetBrains Mono", "SF Mono", "Cascadia Mono", "Fira Code",
+        "Courier New", monospace;
+      font-size: 14pt;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button:hover,
+    button:focus {
+      background: #ff7a1f;
+      box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.24);
+      outline: none;
+    }
+
+    .mini {
+      font-size: 11.5pt;
+    }
+
+    .good {
+      color: var(--green);
+    }
+
+    .warn {
+      color: var(--orange);
+    }
+
+    .bad {
+      color: var(--red);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1><span class="brand">GZ-Diplomacy</span> Bug Report</h1>
+    <p class="intro">
+      Thanks for testing GZ-Diplomacy. This form is for bugs related to team creation,
+      prepared starts, joining/leaving teams, diplomacy stances, admin tools, debug output,
+      or multiplayer behavior.
+    </p>
+
+    <div class="friendly">
+      <p>
+        <strong>Best reports are short and specific.</strong> Tell me what button you clicked,
+        what happened, what you expected, and paste any relevant GZ-Diplomacy/Gizmod debug output
+        if you have it.
+      </p>
+      <p class="note">
+        Crash or desync? Please include <code>factorio-current.log</code> and the relevant file
+        from <code>Factorio/script-output/GIZMOD_logs/</code> if available.
+      </p>
+    </div>
+
+    <form action="https://formsubmit.co/factoriolegion+diplomacy@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="GZ-Diplomacy bug report" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="true" />
+      <input type="hidden" name="_next" value="https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY/thank-you.html" />
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+
+      <div class="grid">
+        <div>
+          <label for="factorio-handle">Factorio handle <span class="required">*</span></label>
+          <input
+            id="factorio-handle"
+            name="factorio_handle"
+            type="text"
+            required
+            autocomplete="username"
+            placeholder="Your Factorio username"
+          />
+        </div>
+
+        <div>
+          <label for="contact">Contact email or Discord handle</label>
+          <input
+            id="contact"
+            name="contact"
+            type="text"
+            maxlength="120"
+            placeholder="Optional, but useful for follow-up"
+          />
+        </div>
+
+        <div>
+          <label for="gz-diplomacy-version">GZ-Diplomacy version <span class="required">*</span></label>
+          <input
+            id="gz-diplomacy-version"
+            name="gz_diplomacy_version"
+            type="text"
+            required
+            value="0.3.14"
+          />
+        </div>
+
+        <div>
+          <label for="gizmod-version">Gizmod version</label>
+          <input
+            id="gizmod-version"
+            name="gizmod_version"
+            type="text"
+            placeholder="Example: 1.0.11"
+          />
+        </div>
+
+        <div>
+          <label for="factorio-version">Factorio version</label>
+          <input
+            id="factorio-version"
+            name="factorio_version"
+            type="text"
+            placeholder="Example: 2.0.76"
+          />
+        </div>
+
+        <div>
+          <label for="player-role">Your role during the bug</label>
+          <select id="player-role" name="player_role">
+            <option value="host-admin">Host / admin</option>
+            <option value="admin">Admin, not host</option>
+            <option value="player">Normal player</option>
+            <option value="late-joiner">Late joiner</option>
+            <option value="spectator-testing">Spectator / tester</option>
+            <option value="unknown">Not sure</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="game-mode">Game context</label>
+          <select id="game-mode" name="game_context">
+            <option value="multiplayer-new-map">Multiplayer, new map</option>
+            <option value="multiplayer-existing-save">Multiplayer, existing save</option>
+            <option value="singleplayer">Singleplayer test</option>
+            <option value="dedicated-server">Dedicated server</option>
+            <option value="unknown">Not sure</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="bug-area">Where did it happen?</label>
+          <select id="bug-area" name="bug_area">
+            <option value="prepared-starts">Prepared starts / spawn preview</option>
+            <option value="create-team">Create team</option>
+            <option value="join-leave-switch-team">Join / leave / switch team</option>
+            <option value="relations">Diplomacy relations</option>
+            <option value="admin-tools">Admin tools / teleporting</option>
+            <option value="gui">GUI / buttons / layout</option>
+            <option value="debug-output">Debug output / live viewer</option>
+            <option value="crash">Crash</option>
+            <option value="desync">Desync</option>
+            <option value="locale">Translation / locale</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section">
+        <label for="summary">Short summary <span class="required">*</span></label>
+        <input
+          id="summary"
+          name="summary"
+          type="text"
+          maxlength="140"
+          required
+          placeholder="Example: Admin Join button let me join a team without a valid spawn"
+        />
+
+        <label for="what-happened">What happened? <span class="required">*</span></label>
+        <textarea
+          id="what-happened"
+          name="what_happened"
+          required
+          maxlength="3000"
+          placeholder="Describe the bug in plain language. Screenshots/log snippets are great if you have them."
+        ></textarea>
+
+        <label for="expected">What did you expect to happen?</label>
+        <textarea
+          id="expected"
+          name="expected_behavior"
+          maxlength="1600"
+          placeholder="Example: The button should have been disabled, or the player should have stayed in the DMZ."
+        ></textarea>
+
+        <label for="steps">Steps to reproduce <span class="required">*</span></label>
+        <textarea
+          id="steps"
+          name="steps_to_reproduce"
+          required
+          maxlength="3000"
+          placeholder="1. Start multiplayer map&#10;2. Prepare starts&#10;3. Click ...&#10;4. Result ..."
+        ></textarea>
+      </div>
+
+      <div class="section">
+        <h2>Team / force context</h2>
+        <p class="note">
+          Helpful for weird edge cases. Skip anything you do not know.
+        </p>
+
+        <label for="team-context">What teams/forces existed?</label>
+        <textarea
+          id="team-context"
+          name="team_force_context"
+          maxlength="2200"
+          placeholder="Example: team_001 had Alice and Bob. I was admin on gz_diplomacy_team_002. Another player was still in preview."
+        ></textarea>
+
+        <label for="other-mods">Other enabled mods</label>
+        <textarea
+          id="other-mods"
+          name="other_mods"
+          maxlength="2200"
+          placeholder="List other mods, especially anything that affects forces, spawn, surfaces, teams, permissions, GUI, or multiplayer."
+        ></textarea>
+      </div>
+
+      <div class="section">
+        <h2>Logs</h2>
+        <p class="note">
+          Logs are optional for small UI issues, but very helpful for crashes, desyncs, bad force state,
+          spawn preview bugs, or anything that smells multiplayer-cursed.
+        </p>
+
+        <label for="gizmod-log">
+          GZ-Diplomacy / Gizmod debug log
+          <span class="hint">Paste current/previous/session output from <code>Factorio/script-output/GIZMOD_logs/</code>.</span>
+        </label>
+        <textarea
+          id="gizmod-log"
+          name="gizmod_debug_log"
+          class="large"
+          maxlength="20000"
+        ></textarea>
+
+        <label for="factorio-log">
+          factorio-current.log
+          <span class="hint">For crash/desync reports, paste the relevant part near the error/desync.</span>
+        </label>
+        <textarea
+          id="factorio-log"
+          name="factorio_current_log"
+          class="large"
+          maxlength="20000"
+        ></textarea>
+
+        <label for="save-link">Save file, screenshot, or extra log link</label>
+        <input
+          id="save-link"
+          name="save_or_screenshot_link"
+          type="url"
+          placeholder="Optional URL to a save, screenshot, GitHub gist, Discord upload, etc."
+        />
+      </div>
+
+      <div class="section">
+        <p class="mini">
+          By submitting this, you are sending the report to
+          <span class="brand">factoriolegion+diplomacy@gmail.com</span>. Please do not include private information
+          you do not want sent by email.
+        </p>
+        <button type="submit">Submit GZ-Diplomacy Report</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

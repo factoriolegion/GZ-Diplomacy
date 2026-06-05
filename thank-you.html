@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GZ-Diplomacy Report Sent</title>
+  <style>
+    :root {
+      --black: #05070a;
+      --gunmetal: #121a22;
+      --panel: rgba(18, 26, 34, 0.94);
+      --light-grey: #c8d0d8;
+      --white: #ffffff;
+      --orange: #ff6600;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at top left, #182331 0%, transparent 34%),
+        linear-gradient(135deg, var(--black), #0b1016 45%, var(--gunmetal));
+      color: var(--light-grey);
+      font-family: "SF Mono", "Cascadia Mono", "Fira Code", "Courier New", monospace;
+      padding: 24px;
+    }
+    main {
+      max-width: 760px;
+      background: var(--panel);
+      border: 1px solid #293746;
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+    }
+    h1 { color: var(--white); margin-top: 0; }
+    .brand { color: var(--orange); }
+    a { color: var(--orange); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1><span class="brand">GZ-Diplomacy</span> report sent</h1>
+    <p>Thanks. Your report was submitted.</p>
+    <p>If this was a crash or desync and you forgot logs, you can submit another report with the relevant <code>factorio-current.log</code> and <code>GIZMOD_logs</code> output.</p>
+    <p><a href="./index.html">Submit another report</a></p>
+  </main>
+</body>
+</html>
